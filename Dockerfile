@@ -21,12 +21,9 @@ RUN yum install -y openssh-server \
     && ssh-keygen -t rsa -f /root/.ssh/id_rsa -P '' \
     && cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys \
     && chmod a+x /root/.ssh/authorized_keys \
-    && echo -e "Host localhost\n  StrictHostKeyChecking no\n\nHost 0.0.0.0\n  StrictHostKeyChecking no\n\nHost hadoop*\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" >> /root/.ssh/config
+    && echo -e "Host localhost\n  StrictHostKeyChecking no\n\nHost 0.0.0.0\n  StrictHostKeyChecking no\n\nHost master*\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null\n\nHost slave*\n   StrictHostKeyChecking no\n   UserKnownHostsFile=/dev/null" >> /root/.ssh/config
 
 
 
-ADD start1.sh $STARTUPDIR/start1.sh
-RUN chmod a+x $STARTUPDIR/start1.sh
-
-ENTRYPOINT ["/dockerstartup/start1.sh"]
-CMD ["--wait"]
+ADD vnc_startup.sh $STARTUPDIR/vnc_startup.sh
+RUN chmod a+x $STARTUPDIR/vnc_startup.sh
